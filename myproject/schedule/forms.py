@@ -1,14 +1,5 @@
 from django import forms
 from .models import Member, DateOption
-from django.forms import modelformset_factory
-
-
-DateOptionFormSet = modelformset_factory(
-    DateOption,
-    fields=('date',),
-    extra=3,
-    widgets={'date': forms.DateInput(attrs={'type': 'date'})}
-)
 
 class ScheduleForm(forms.Form):
     name = forms.ModelChoiceField(queryset=Member.objects.all(), empty_label="名前を選択")
@@ -18,10 +9,10 @@ class ScheduleForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['dates'].queryset = DateOption.objects.all()
 
-class CreateDateOptionForm(forms.ModelForm):
-    class Meta:
-        model = DateOption
-        fields = ['date']
-        widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'}),
-        }
+class CreateDateOptionForm(forms.Form):
+    dates = forms.CharField(widget=forms.TextInput(attrs={'type': 'date', 'multiple': True}))
+
+    def clean_dates(self):
+        dates_str = self.cleaned_data['dates']
+        date_list = [date_str.strip() for date_str in dates_str.split(',')]
+        return date_list

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import ScheduleForm, CreateDateOptionForm, DateOptionFormSet
+from .forms import ScheduleForm, CreateDateOptionForm
 from .models import Member, DateOption
+from datetime import datetime
 
 def index(request):
     return render(request, 'schedule/index.html')
@@ -24,10 +25,26 @@ def success(request):
 
 def create_date(request):
     if request.method == 'POST':
-        formset = DateOptionFormSet(request.POST)
-        if formset.is_valid():
-            formset.save()
-            return redirect('schedule') 
+        form = CreateDateOptionForm(request.POST)
+        if form.is_valid():
+            date_list = form.cleaned_data['dates']
+            for date_str in date_list:
+                date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+                DateOption.objects.create(date=date_obj)
     else:
-        formset = DateOptionFormSet(queryset=DateOption.objects.none())
-    return render(request, 'schedule/create_date.html', {'formset': formset})
+        form = CreateDateOptionForm()
+
+    return render(request, 'schedule/create_date.html', {'form': form})
+
+def view_results(request):
+    # 各日付とその日付に参加するメンバーのリストを取得
+    dates_with_participants = DateOption.objects.prefetch_related('participants').all()
+
+    # 最も参加者の多い日付を見つける
+    most_participants = max(dates_with_participants, key=lambda d: d.participants.count(), default=None)
+
+    context = {
+        'dates_with_participants': dates_with_participants,
+        'most_participants': most_participants
+    }
+    return render(request, 'schedule/view_results.html', context)

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>回答結果</title>
+</head>
+<body>
+    <h1>回答結果</h1>
+    {% if most_participants %}
+        <p>最も参加者の多い日: {{ most_participants.date }} ({{ most_participants.participants.count }}人)</p>
+    {% endif %}
+    
+    <h2>各日付の参加者一覧</h2>
+    {% for date_option in dates_with_participants %}
+        <p>
+            <strong>{{ date_option.date }}</strong>
+            <ul>
+                {% for member in date_option.participants.all %}
+                    <li>{{ member.name }}</li>
+                {% empty %}
+                    <li>参加者なし</li>
+                {% endfor %}
+            </ul>
+        </p>
+    {% endfor %}
+
+    <a href="{% url 'create_date' %}">日程を作成する</a>
+    <a href="{% url 'schedule' %}">日程調整に回答する</a>
+</body>
+</html>
