@@ -23,6 +23,19 @@
             </ul>
         </p>
     {% endfor %}
+    
+    {% for date_option in dates_with_participants %}
+    <div>
+        <p>{{ date_option.date }}</p>
+        <!-- 削除フォーム -->
+        <form action="{% url 'delete_date' date_option.date|date:"Y-m-d" %}" method="post">
+            {% csrf_token %}
+            <button type="submit">この日付を削除</button>
+        </form>
+    </div>
+    {% endfor %}
+
+
 
     <a href="{% url 'create_date' %}">日程を作成する</a>
     <a href="{% url 'schedule' %}">日程調整に回答する</a>

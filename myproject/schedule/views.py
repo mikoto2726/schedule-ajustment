@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ScheduleForm, CreateDateOptionForm
 from .models import Member, DateOption
 from datetime import datetime
+from django.http import HttpResponseForbidden
+from django.db.models import Q
 
 def index(request):
     return render(request, 'schedule/index.html')
@@ -48,3 +50,14 @@ def view_results(request):
         'most_participants': most_participants
     }
     return render(request, 'schedule/view_results.html', context)
+
+def delete_date(request, date_str):
+    if request.method == "POST":
+        # 文字列から日付オブジェクトを作成
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+        # 日付に一致するDateOptionインスタンスを検索
+        date_option = get_object_or_404(DateOption, date=date_obj)
+        date_option.delete()  # インスタンスを削除
+        return redirect('view_results')
+    else:
+        return HttpResponseForbidden()
