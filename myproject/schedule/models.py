@@ -9,7 +9,7 @@ class Member(models.Model):
         return self.name
     
 class DateOption(models.Model):
-    date = models.DateField()
+    date = models.DateField(unique=True)
     participants = models.ManyToManyField('Member', related_name='available_dates')
 
     def __str__(self):

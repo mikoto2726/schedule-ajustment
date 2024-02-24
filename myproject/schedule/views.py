@@ -4,6 +4,7 @@ from .models import Member, DateOption
 from datetime import datetime
 from django.http import HttpResponseForbidden
 from django.db.models import Q
+from django.contrib import messages
 
 def index(request):
     return render(request, 'schedule/index.html')
@@ -32,7 +33,11 @@ def create_date(request):
             date_list = form.cleaned_data['dates']
             for date_str in date_list:
                 date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-                DateOption.objects.create(date=date_obj)
+                if not DateOption.objects.filter(date=date_obj).exists():
+                    DateOption.objects.create(date=date_obj)
+                    messages.success(request, "日付が正常に追加されました。")
+                else:
+                    messages.error(request, "この日付は入力済みです。")
     else:
         form = CreateDateOptionForm()
 
