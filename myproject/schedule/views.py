@@ -3,8 +3,8 @@ from .forms import ScheduleForm, CreateDateOptionForm
 from .models import Member, DateOption
 from datetime import datetime
 from django.http import HttpResponseForbidden
-from django.db.models import Q
-from django.contrib import messages
+
+
 
 def index(request):
     return render(request, 'schedule/index.html')
@@ -42,7 +42,7 @@ def create_date(request):
 
 def view_results(request):
     # 各日付とその日付に参加するメンバーのリストを取得
-    dates_with_participants = DateOption.objects.prefetch_related('participants').all()
+    dates_with_participants = DateOption.objects.prefetch_related('participants').order_by('date').all()
 
     # 最も参加者の多い日付を見つける
     most_participants = max(dates_with_participants, key=lambda d: d.participants.count(), default=None)
