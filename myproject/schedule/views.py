@@ -3,8 +3,8 @@ from .forms import ScheduleForm, CreateDateOptionForm
 from .models import Member, DateOption
 from datetime import datetime
 from django.http import HttpResponseForbidden
-
-
+from django.views.decorators.http import require_http_methods
+from django.contrib import messages
 
 def index(request):
     return render(request, 'schedule/index.html')
@@ -35,6 +35,7 @@ def create_date(request):
                 date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
                 if not DateOption.objects.filter(date=date_obj).exists():
                     DateOption.objects.create(date=date_obj)
+            messages.success(request, "日程調整が作成されました。")
     else:
         form = CreateDateOptionForm()
 
@@ -63,3 +64,9 @@ def delete_date(request, date_str):
         return redirect('view_results')
     else:
         return HttpResponseForbidden()
+    
+@require_http_methods(["POST"])  # POSTリクエストのみを許可
+def delete_all_dates(request):
+    # DateOptionモデルの全インスタンスを削除
+    DateOption.objects.all().delete()
+    return redirect('view_results')

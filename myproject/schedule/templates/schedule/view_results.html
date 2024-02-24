@@ -28,6 +28,11 @@
         </p>
     {% endfor %}
 
+    <form action="{% url 'delete_all_dates' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" >全ての日付を削除</button>
+    </form>
+
     <a href="{% url 'create_date' %}">日程を作成する</a>
     <a href="{% url 'schedule' %}">日程調整に回答する</a>
 </body>
