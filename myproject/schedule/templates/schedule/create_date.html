@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>create form</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ja.min.js"></script>
+
 </head>
 <body>
     <form method="post">
         {% csrf_token %}
-        {{ form.dates }}
+        <div id="datepicker"></div> <!-- カレンダーを表示するdiv -->
+        <input type="hidden" id="id_dates" name="dates"> <!-- 隠しフィールド -->
         <button type="submit">作成</button>
     </form>
+    
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -21,6 +31,25 @@
 
     <a href="{% url 'schedule' %}">日程調整に回答する</a>
     <a href="{% url 'view_results' %}">集計を見る</a>
+
+    <script>
+        $(document).ready(function(){
+            var $datepicker = $('#datepicker').datepicker({
+                format: "yyyy-mm-dd",
+                multidate: true,
+                language: "ja",
+                inline: true
+            });
+        
+            $datepicker.on("changeDate", function(event) {
+                var dates = $datepicker.datepicker('getDates');
+                var dateArray = dates.map(function(date) {
+                    return date.toISOString().split('T')[0]; // 日付をYYYY-MM-DD形式に変換
+                });
+                $('#id_dates').val(dateArray.join(',')); // 隠しフィールドに設定
+            });
+        });
+        </script>
 
 </body>
 </html>
