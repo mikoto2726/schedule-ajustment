@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ScheduleForm, CreateDateOptionForm
-from .models import Member, DateOption
+from .forms import ScheduleForm, CreateDateOptionForm, ScheduleSessionForm
+from .models import Member, DateOption, ScheduleSession
 from datetime import datetime
 from django.http import HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
@@ -13,10 +13,12 @@ def schedule(request):
     if request.method == 'POST':
         form = ScheduleForm(request.POST)
         if form.is_valid():
+            selected_session = form.cleaned_data['session']
             selected_name = form.cleaned_data['name']
             selected_dates = form.cleaned_data['dates']
             member = Member.objects.get(name=selected_name)
             member.available_dates.set(selected_dates)
+            selected_session.date_options.set(selected_dates) 
             member.save()
             return redirect('success')  # 成功時のリダイレクト先
     else:
