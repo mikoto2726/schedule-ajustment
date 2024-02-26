@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,13 +8,13 @@
 <body>
     <h1>回答結果</h1>
     {% if most_participants %}
-        <p>最も参加者の多い日: {{ most_participants.date }} ({{ most_participants.participants.count }}人)</p>
+        <p>最も参加者の多い日: {{ most_participants.date |date:"Y-m-d" }} ({{ most_participants.date |weekday }}) ({{ most_participants.participants.count }}人)</p>
     {% endif %}
     
     <h2>各日付の参加者一覧</h2>
     {% for date_option in dates_with_participants %}
-        <p>
-            <strong>{{ date_option.date }}</strong>
+        <div> 
+            <strong>{{ date_option.date|date:"Y-m-d" }} ({{ date_option.date |weekday }}) </strong>
             <form action="{% url 'delete_date' date_option.date|date:"Y-m-d" %}" method="post">
                 {% csrf_token %}
                 <button type="submit">この日付を削除</button>
@@ -25,7 +26,7 @@
                     <li>参加者なし</li>
                 {% endfor %}
             </ul>
-        </p>
+        </div>
     {% endfor %}
 
     <form action="{% url 'delete_all_dates' %}" method="post">

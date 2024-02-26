@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils.formats import date_format
 # Create your models here.
 
 class Member(models.Model):
@@ -13,4 +13,6 @@ class DateOption(models.Model):
     participants = models.ManyToManyField('Member', related_name='available_dates')
 
     def __str__(self):
-        return self.date.strftime('%Y-%m-%d')
+        weekdays = ['月', '火', '水', '木', '金', '土', '日']
+        weekday_str = weekdays[self.date.weekday()]
+        return f"{self.date} ({weekday_str})"
