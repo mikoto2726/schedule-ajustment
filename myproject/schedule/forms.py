@@ -11,6 +11,7 @@ class ScheduleForm(forms.Form):
         self.fields['dates'].queryset = DateOption.objects.all()
 
 class CreateDateOptionForm(forms.Form):
+    name = forms.ModelChoiceField(queryset=Member.objects.all(), empty_label="名前を選択")
     dates = forms.CharField(widget=forms.TextInput(attrs={'type': 'date', 'multiple': True}))
 
     def clean_dates(self):

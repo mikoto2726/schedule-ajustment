@@ -16,6 +16,7 @@
 <body>
     <form method="post">
         {% csrf_token %}
+        <p>{{ form.name.label_tag }} {{ form.name }}</p>
         <div id="datepicker"></div> <!-- カレンダーを表示するdiv -->
         <input type="hidden" id="id_dates" name="dates"> <!-- 隠しフィールド -->
         <button type="submit">作成</button>
