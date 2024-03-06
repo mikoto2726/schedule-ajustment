@@ -5,7 +5,6 @@ from django.utils.formats import date_format
 class Member(models.Model):
     name = models.CharField(max_length=30, unique=True)
     slack_id = models.CharField(max_length=20, primary_key=True)
-    date_options = models.ManyToManyField('DateOption', related_name='members')
     def __str__(self):
         return self.name
     

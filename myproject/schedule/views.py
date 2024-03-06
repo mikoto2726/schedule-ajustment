@@ -30,14 +30,11 @@ def create_date(request):
     if request.method == 'POST':
         form = CreateDateOptionForm(request.POST)
         if form.is_valid():
-            selected_name = form.cleaned_data['name']
             date_list = form.cleaned_data['dates']
-            member = Member.objects.get(name=selected_name)
             for date_str in date_list:
                 date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
                 if not DateOption.objects.filter(date=date_obj).exists():
-                    new_date_option = DateOption.objects.create(date=date_obj)
-                    member.date_options.add(new_date_option)
+                    DateOption.objects.create(date=date_obj)
             messages.success(request, "日程調整が作成されました。")
     else:
         form = CreateDateOptionForm()
