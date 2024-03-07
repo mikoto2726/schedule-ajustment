@@ -1,27 +1,33 @@
 from django import forms
-from .models import Member, DateOption
+from .models import Event, Participant
 from datetime import datetime
+from django.core.exceptions import ValidationError
 
-class ScheduleForm(forms.Form):
-    name = forms.ModelChoiceField(queryset=Member.objects.all(), empty_label="名前を選択")
-    dates = forms.ModelMultipleChoiceField(queryset=DateOption.objects.all(), widget=forms.CheckboxSelectMultiple, required=False)
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['title', 'description']
+
+class ParticipantForm(forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = ['name', 'email']
+
+class MultipleDatesForm(forms.Form):
+    title = forms.CharField(max_length=200, label="タイトル", widget=forms.TextInput(attrs={'placeholder': 'イベントのタイトル'}))
+    description = forms.CharField(label="説明", widget=forms.Textarea(attrs={'placeholder': 'イベントの説明'}))
+    dates = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '日付を選択'}))
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['dates'].queryset = DateOption.objects.all()
-
-class CreateDateOptionForm(forms.Form):
-    dates = forms.CharField(widget=forms.TextInput(attrs={'type': 'date', 'multiple': True}))
-
     def clean_dates(self):
-        # 入力された日付の文字列をリストに変換
-        dates_str = self.cleaned_data['dates']
-        date_list_str = [date_str.strip() for date_str in dates_str.split(',')]
+        data = self.cleaned_data['dates']
+        date_list = [date.strip() for date in data.split(',')]
+        
+        # 日付の形式を検証
+        for date_str in date_list:
+            try:
+                datetime.strptime(date_str, '%m-%d')
+            except ValueError:
+                raise ValidationError(f'{date_str} は有効な日付形式ではありません。YYYY-MM-DD形式で入力してください。')
 
-        # 文字列を日付型に変換し、日付順にソート
-        date_list = [datetime.strptime(date_str, '%Y-%m-%d').date() for date_str in date_list_str]
-        date_list.sort()
+        return date_list
 
-        # ソートされた日付リストを、再び文字列のリストに変換して返す（必要に応じて）
-        sorted_date_list_str = [date.strftime('%Y-%m-%d') for date in date_list]
-        return sorted_date_list_str

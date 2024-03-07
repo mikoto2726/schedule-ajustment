@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ event.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h5 class="mb-1">{{ event.title }}</h5>
+    <p class="mb-1">{{ event.description }}</p>
+    <p>{{ event.date|date:"m月d日" }}</p>
+    <a href="{% url 'event_list' %}" class="btn btn-secondary">イベントリストに戻る</a>
+</div>
+</body>
+</html>

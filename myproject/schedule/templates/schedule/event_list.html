@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>イベントリスト</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>日程調整リスト</h1>
+        <a href="{% url 'your_view' %}" class="btn btn-primary">日程調整を作成する</a>
+        
+        <form action="{% url 'delete_all_dates' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" >全ての日付を削除</button>
+        </form>
+        
+        <div class="list-group mt-3">
+            {% for event in events %}
+                <a href="{% url 'event_detail' event.id %}" class="list-group-item list-group-item-action">
+                    <h4 class="mb-1">titel: {{ event.title }}</h4>
+                    <h5 class="mb-1">description: {{ event.description }}</h5>
+                    <p>
+                        {% for event_date in event.dates.all %}
+                            {{ event_date.date|date:"m月d日" }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                </a>
+                {% empty %}
+                <div class="alert alert-warning" role="alert">
+                    イベントが見つかりません。
+                </div>
+            {% endfor %}  
+        </div>
+    </div>
+
+    
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>イベント編集</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>イベントを編集</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a href="{% url 'event_list' %}" class="btn btn-secondary">キャンセル</a>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#id_dates", {  // formのdatesフィールドのidを指定
+        mode: "multiple",
+        dateFormat: "m-d",
+        locale: "ja"  // 日本語化（オプション）
+    });
+});
+</script>
+</body>
+</html>
+
