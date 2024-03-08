@@ -1,0 +1,18 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>回答結果</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'view_event_results' event_id=event.id %}" class="btn btn-secondary">集計結果を見る</a>
+
+    <a href="{% url 'your_view' %}">日程を作成する</a>
+</body>
+</html>

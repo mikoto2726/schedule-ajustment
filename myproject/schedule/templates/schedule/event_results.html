@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>{{ event.title }}の結果</h2>
+{% for date in event_dates %}
+    <div>
+        <h4>{{ date.date|date:"m月d日" }}</h4>
+        <p>利用可能: {{ date.available_count }}</p>
+        <p>利用不可能: {{ date.unavailable_count }}</p>
+    </div>
+{% endfor %}
+
+
+</body>
+</html>

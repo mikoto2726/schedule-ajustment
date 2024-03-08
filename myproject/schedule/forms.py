@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event, Participant
+from .models import Event, Participant, Response
 from datetime import datetime
 from django.core.exceptions import ValidationError
 
@@ -31,3 +31,7 @@ class MultipleDatesForm(forms.Form):
 
         return date_list
 
+class ResponseForm(forms.ModelForm):
+    class Meta:
+        model = Response
+        fields = ['event_date', 'availability']
