@@ -8,20 +8,20 @@
 <body>
     <h1>回答結果</h1>
     {% if most_participants %}
-        <p>最も参加者の多い日: {{ most_participants.date |date:"Y-m-d" }} ({{ most_participants.date |weekday }}) ({{ most_participants.participants.count }}人)</p>
+        <p>最も参加者の多い日: {{ most_participants.date |date:"m-d" }} ({{ most_participants.date |weekday }}) ({{ most_participants.participants.all.count }}人)</p>
     {% endif %}
     
     <h2>各日付の参加者一覧</h2>
     {% for date_option in dates_with_participants %}
         <div> 
-            <strong>{{ date_option.date|date:"Y-m-d" }} ({{ date_option.date |weekday }}) </strong>
-            <form action="{% url 'delete_date' date_option.date|date:"Y-m-d" %}" method="post">
+            <strong>{{ date_option.date|date:"m-d" }} ({{ date_option.date |weekday }}) </strong>
+            <form action="{% url 'delete_date' date_option.date|date:"m-d" %}" method="post">
                 {% csrf_token %}
                 <button type="submit">この日付を削除</button>
             </form>
             <ul>
                 {% for member in date_option.participants.all %}
-                    <li>{{ member.name }}</li>
+                    <li>{{ member.member.name }}</li>
                 {% empty %}
                     <li>参加者なし</li>
                 {% endfor %}
@@ -34,7 +34,6 @@
         <button type="submit" >全ての日付を削除</button>
     </form>
 
-    <a href="{% url 'create_date' %}">日程を作成する</a>
-    <a href="{% url 'schedule' %}">日程調整に回答する</a>
+    <a href="{% url 'create' %}">日程を作成する</a>
 </body>
 </html>

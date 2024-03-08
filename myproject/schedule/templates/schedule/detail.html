@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ event.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h5 class="mb-1">{{ event.title }}</h5>
+    <p class="mb-1">{{ event.description }}</p>
+    {% for event_date in event.dates.all %}
+        <p>{{ event_date.date|date:"m月d日" }}{% if not forloop.last %}, {% endif %}</p>
+    {% endfor %}
+    <a href="{% url 'answer' pk=event.pk %}" class="btn btn-secondary">回答する</a>
+    <a href="{% url 'list' %}" class="btn btn-secondary">イベントリストに戻る</a>
+</div>
+</body>
+</html>

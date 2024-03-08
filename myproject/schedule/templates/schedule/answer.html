@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>日程調整</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">送信</button>
+    </form>
+
+    <a href="{% url 'create' %}" class="btn btn-secondary">日程を作成する</a>
+    <a href="{% url 'results' %}" class="btn btn-secondary">集計を見る</a>
+    <a href="{% url 'list' %}" class="btn btn-secondary">イベントリストに戻る</a>
+
+</body>
+</html>

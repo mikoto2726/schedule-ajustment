@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.formats import date_format
-# Create your models here.
+
 
 class Member(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -16,3 +16,22 @@ class DateOption(models.Model):
         weekdays = ['月', '火', '水', '木', '金', '土', '日']
         weekday_str = weekdays[self.date.weekday()]
         return f"{self.date} ({weekday_str})"
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    
+class Participant(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+
+class EventDate(models.Model):
+    event = models.ForeignKey(Event, related_name='dates', on_delete=models.CASCADE)
+    date = models.DateField()
+
+    def __repr__(self):
+        return f"EventDate({self.date.month}, {self.date.day})"
+
+    def __str__(self):
+        return f"{self.date.month}-{self.date.day}"
