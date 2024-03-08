@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import AnswerForm, MultipleDatesForm, EventForm, ParticipantForm
-from .models import Member, DateOption, Event, EventDate
+from .models import Member, DateOption, Event, EventDate, Participant
 from datetime import datetime
 from django.http import HttpResponseForbidden
 from django.views.decorators.http import require_http_methods

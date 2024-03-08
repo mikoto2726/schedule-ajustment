@@ -21,7 +21,7 @@
             </form>
             <ul>
                 {% for member in date_option.participants.all %}
-                    <li>{{ member.member.name }}</li>
+                    <li>{{ member.name }}</li>
                 {% empty %}
                     <li>参加者なし</li>
                 {% endfor %}
