@@ -12,15 +12,15 @@
     {% endif %}
     
     <h2>各日付の参加者一覧</h2>
-    {% for date_option in dates_with_participants %}
+    {% for event_date in event_dates_with_participants %}
         <div> 
-            <strong>{{ date_option.date|date:"m-d" }} ({{ date_option.date |weekday }}) </strong>
-            <form action="{% url 'delete_date' date_option.date|date:"m-d" %}" method="post">
+            <strong>{{ event_date.date|date:"m-d" }} ({{ event_date.date |weekday }})</strong>
+            <form action="{% url 'delete_date' event_date.date|date:"m-d" %}" method="post">
                 {% csrf_token %}
                 <button type="submit">この日付を削除</button>
             </form>
             <ul>
-                {% for member in date_option.participants.all %}
+                {% for member in event_date.participants.all %}
                     <li>{{ member.name }}</li>
                 {% empty %}
                     <li>参加者なし</li>
@@ -35,5 +35,6 @@
     </form>
 
     <a href="{% url 'create' %}">日程を作成する</a>
+    <a href="{% url 'list' %}" class="btn btn-secondary">イベントリストに戻る</a>
 </body>
 </html>

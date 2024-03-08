@@ -29,9 +29,16 @@ class Participant(models.Model):
 class EventDate(models.Model):
     event = models.ForeignKey(Event, related_name='dates', on_delete=models.CASCADE)
     date = models.DateField()
-
+    participants = models.ManyToManyField('Member', related_name='participating_dates')
     def __repr__(self):
         return f"EventDate({self.date.month}, {self.date.day})"
 
     def __str__(self):
         return f"{self.date.month}-{self.date.day}"
+    
+class EventParticipant(models.Model):
+    event_date = models.ForeignKey(EventDate, on_delete=models.CASCADE, related_name='event_participants')
+    participant = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='event_dates')
+
+    def __str__(self):
+        return f"{self.event_date} - {self.participant}"
