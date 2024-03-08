@@ -6,11 +6,11 @@ from django.views.decorators.http import require_http_methods
 
 def event_list(request):
     events = Event.objects.prefetch_related('dates').all()
-    return render(request, 'schedule/event_list.html', {'events': events})
+    return render(request, 'schedule/list.html', {'events': events})
 
 def event_detail(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    return render(request, 'schedule/event_detail.html', {'event': event})
+    return render(request, 'schedule/detail.html', {'event': event})
 
 
 def your_view(request):
@@ -27,10 +27,7 @@ def your_view(request):
             return redirect('event_list')  # 'your_success_url'は成功時にリダイレクトするURLの名前です。
     else:
         form = MultipleDatesForm()
-    return render(request, 'schedule/event_edit.html', {'form': form})
-
-def success(request):
-    return render(request, 'schedule/success.html')
+    return render(request, 'schedule/create.html', {'form': form})
 
 @require_http_methods(["POST"])  # POSTリクエストのみを許可
 def delete_all_dates(request):

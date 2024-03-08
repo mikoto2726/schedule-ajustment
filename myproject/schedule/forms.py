@@ -15,7 +15,7 @@ class ParticipantForm(forms.ModelForm):
 
 class MultipleDatesForm(forms.Form):
     title = forms.CharField(max_length=200, label="タイトル", widget=forms.TextInput(attrs={'placeholder': 'イベントのタイトル'}))
-    description = forms.CharField(label="説明", widget=forms.Textarea(attrs={'placeholder': 'イベントの説明'}))
+    description = forms.CharField(max_length=200, label="説明", widget=forms.TextInput(attrs={'placeholder': 'イベントの説明'}))
     dates = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '日付を選択'}))
     
     def clean_dates(self):

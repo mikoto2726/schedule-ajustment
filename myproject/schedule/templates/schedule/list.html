@@ -7,15 +7,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>日程調整リスト</h1>
+        <h1>日程調整一覧</h1>
         <a href="{% url 'your_view' %}" class="btn btn-primary">日程調整を作成する</a>
         
         <form action="{% url 'delete_all_dates' %}" method="post">
             {% csrf_token %}
-            <button type="submit" >全ての日付を削除</button>
+            
+            <button onclick="return confirm('本当に削除しますか？')">全ての日付を削除</button>
+
         </form>
         
-        <div class="list-group mt-3">
+        <div class="list-group mt-3"  class="text-wrap bg-body-secondary border" style="width: 70rem;">
             {% for event in events %}
                 <a href="{% url 'event_detail' event.id %}" class="list-group-item list-group-item-action">
                     <h4 class="mb-1">titel: {{ event.title }}</h4>

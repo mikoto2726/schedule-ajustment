@@ -2,13 +2,13 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>イベント編集</title>
+    <title>日程調整作成</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
 <div class="container">
-    <h1>イベントを編集</h1>
+    <h1>日程調整を作成する</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
