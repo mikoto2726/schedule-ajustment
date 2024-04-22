@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -10,7 +11,7 @@
     <h5 class="mb-1">{{ event.title }}</h5>
     <p class="mb-1">{{ event.description }}</p>
     {% for event_date in event.dates.all %}
-        <p>{{ event_date.date|date:"m月d日" }}{% if not forloop.last %}, {% endif %}</p>
+        <p>{{ event_date.date|date:"m-d" }} ({{ event_date.date|weekday }}){% if not forloop.last %} {% endif %}</p>
     {% endfor %}
     <a href="{% url 'answer' pk=event.pk %}" class="btn btn-secondary">回答する</a>
     <a href="{% url 'results' event_id=event.pk %}" class="btn btn-secondary">集計結果</a>

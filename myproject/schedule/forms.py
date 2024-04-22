@@ -2,6 +2,8 @@ from django import forms
 from .models import Member, EventDate, Event, Participant, DateOption
 from datetime import datetime
 from django.core.exceptions import ValidationError
+from django.forms.widgets import CheckboxSelectMultiple
+
 
 class MultipleDatesForm(forms.Form):
     title = forms.CharField(max_length=200, label="タイトル", widget=forms.TextInput(attrs={'placeholder': 'イベントのタイトル'}))
@@ -35,8 +37,7 @@ class ParticipantForm(forms.ModelForm):
     class Meta:
         model = Participant
         fields = ['name', 'email']
-
-
+        
 class AnswerForm(forms.Form):
     name = forms.ModelChoiceField(queryset=Member.objects.all(), empty_label="名前を選択")
     dates = forms.ModelMultipleChoiceField(queryset=EventDate.objects.none(), widget=forms.CheckboxSelectMultiple, required=False)

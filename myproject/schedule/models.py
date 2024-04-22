@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.formats import date_format
-
+import locale
 
 class Member(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -30,11 +30,16 @@ class EventDate(models.Model):
     event = models.ForeignKey(Event, related_name='dates', on_delete=models.CASCADE)
     date = models.DateField()
     participants = models.ManyToManyField('Member', related_name='participating_dates')
+    
     def __repr__(self):
         return f"EventDate({self.date.month}, {self.date.day})"
 
     def __str__(self):
-        return f"{self.date.month}-{self.date.day}"
+        locale.setlocale(locale.LC_TIME, 'ja_JP.UTF-8')
+        # 日付から曜日を取得し、省略形に対応する日本語の曜日名にマッピングする
+        weekday = self.date.strftime('%a')
+        
+        return f"{self.date.month}-{self.date.day} ({weekday})"
     
 class EventParticipant(models.Model):
     event_date = models.ForeignKey(EventDate, on_delete=models.CASCADE, related_name='event_participants')
